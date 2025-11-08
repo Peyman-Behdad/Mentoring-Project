@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login box</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <div class="w-full h-screen flex items-center justify-center">
+      <div
+        class="w-[100%] h-screen bg-blue-500 flex-col flex items-center justify-center p-5"
+      >
+        <div
+          class="w-[400px] shadow-[0_0_3px_white] rounded-[10px] bg-white p-5"
+        >
+          <h1 class="font-bold text-2xl">Hello!</h1>
+          <p class="pt-[30px] text-xl font-light">sign up to get started</p>
+          <div class="pt-[20px] flex gap-3 flex-col">
+            <div
+              class="border flex items-center gap-2 w-full h-[60px] rounded-[30px] px-[20px]"
+            >
+              <i class="fa-regular fa-envelope text-2xl text-gray-400"></i
+              ><input
+                class="outline-none w-full"
+                type="text"
+                placeholder="Email Address"
+              />
+            </div>
+            <div
+              class="border flex items-center gap-2 w-full h-[60px] rounded-[30px] px-[20px]"
+            >
+              <i class="fa-solid fa-lock text-2xl text-gray-400"></i
+              ><input
+                class="outline-none w-full"
+                type="text"
+                placeholder="Password"
+              />
+            </div>
+            <div class="flex justify-center">
+                <button class="w-full h-[60px] rounded-[30px] bg-blue-500 text-white">Login</button>
+            </div>
+            <p class="font-light">Forgot password</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
