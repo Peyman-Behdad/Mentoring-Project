@@ -1,0 +1,24 @@
+{
+  "name": "node-project",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Peyman-Behdad/Mentoring-Project#readme",
+  "bugs": {
+    "url": "https://github.com/Peyman-Behdad/Mentoring-Project/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Peyman-Behdad/Mentoring-Project.git"
+  },
+  "license": "ISC",
+  "author": "Peyman Behdad",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
