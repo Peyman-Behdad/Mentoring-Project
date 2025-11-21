@@ -11,9 +11,9 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log(err));
 
-app.get("/test", (req, res) => {
-  res.json({ message: "Server is running ✅" });
-});
+// app.get("/test", (req, res) => {
+//   res.json({ message: "Server is running ✅" });
+// });
 
 // روت‌ها
 const authorRoutes = require("./routes/authorRoutes");
