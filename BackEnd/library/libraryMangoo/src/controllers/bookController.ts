@@ -4,7 +4,11 @@ import Book from "../models/Book";
 // get books
 export const getBooks = async (req: Request, res: Response) => {
   const books = await Book.find().populate("author");
-  res.json(books);
+  if (books.length === 0) {
+    return res.json({ message: "کتابی وجود ندارد" });
+  } else {
+    res.json(books);
+  }
 };
 
 // create books

@@ -4,7 +4,11 @@ import Author from "../models/Author";
 // get author
 export const getAuthors = async (req: Request, res: Response) => {
   const authors = await Author.find();
-  res.json(authors);
+  if (authors.length === 0) {
+    return res.json({ message: "نوینسده ای وجود ندارد" });
+  } else {
+      res.json(authors);
+  }
 };
 
 // create author
