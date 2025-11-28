@@ -1,7 +1,11 @@
 const express = require("express");
 require("dotenv").config();
+const Logger = require("./logger");
+
 const app = express();
 app.use(express.json());
+
+app.use(Logger);
 
 const courses = [
   { id: 1, name: "html" },
