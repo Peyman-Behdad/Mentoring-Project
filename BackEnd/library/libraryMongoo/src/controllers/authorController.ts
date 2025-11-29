@@ -6,7 +6,13 @@ import { z } from "zod";
 const authorSchema = z.object({
   name: z.string().min(3, "نام نویسنده باید بیشتر از ۳ کاراکتر باشد"),
   gender: z.enum(["Male", "Female", "Other"]).optional(),
-  age: z.number().min(18, "سن نویسنده باید بیشتر از ۱۸ سال باشد").max(80, "سن نویسنده باید کمتر از ۸۰ سال باشد").int().positive().optional(),
+  age: z
+    .number()
+    .min(18, "سن نویسنده باید بیشتر از ۱۸ سال باشد")
+    .max(80, "سن نویسنده باید کمتر از ۸۰ سال باشد")
+    .int()
+    .positive()
+    .optional(),
 });
 
 // get all author by Mongoo
@@ -61,11 +67,9 @@ export const getAuthorByIdSql = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const [rows] = await pool.query("SELECT * FROM authors WHERE id = ?", [id]);
-
     if ((rows as any[]).length === 0) {
       return res.status(404).json({ message: "نویسنده یافت نشد" });
     }
-
     res.json((rows as AuthorEntity[])[0]);
   } catch (error) {
     console.error(error);

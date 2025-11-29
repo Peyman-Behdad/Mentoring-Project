@@ -1,6 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 
-const bookSchema = new Schema(
+export interface BookEntity {
+  title: string;
+  publisher: string;
+  image: string;
+  author: Object;
+}
+
+const bookSchema = new Schema<BookEntity>(
   {
     title: { type: String, required: true },
     publisher: { type: String, required: true },
@@ -8,8 +15,8 @@ const bookSchema = new Schema(
     author: {
       type: Schema.Types.ObjectId,
       ref: "Author",
-      required: true
-    }
+      required: true,
+    },
   },
   { timestamps: true }
 );
