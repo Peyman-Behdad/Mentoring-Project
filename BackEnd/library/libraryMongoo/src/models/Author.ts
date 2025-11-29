@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-interface AuthorEntity   {
+export interface AuthorEntity   {
   name: string;
   gender: string;
   age: number;
@@ -9,7 +9,7 @@ interface AuthorEntity   {
 const authorSchema = new Schema<AuthorEntity>(
   {
     name: { type: String, required: true },
-    gender: { type: String, enum: ["male", "female"], required: true },
+    gender: { type: String, required: true },
     age: { type: Number, required: true },
   },
   { timestamps: true }
