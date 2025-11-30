@@ -7,7 +7,9 @@ import {
   deleteBook,
   getBooksSql,
   getBookByIdSql,
-  createBookSql
+  createBookSql,
+  updateBookSql,
+  deleteBookSql
 } from "../controllers/bookController";
 
 const router = Router();
@@ -15,7 +17,7 @@ const router = Router();
 router.get("/", getBooksSql);
 router.get("/:id", getBookByIdSql);
 router.post("/", createBookSql);
-router.put("/:id", updateBook);
-router.delete("/:id", deleteBook);
+router.put("/:id", updateBookSql);
+router.delete("/:id", deleteBookSql);
 
 export default router;

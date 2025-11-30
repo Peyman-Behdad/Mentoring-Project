@@ -10,7 +10,7 @@ const bookSchema = z.object({
     .min(3, "نام انتشارات باید بیشتر از ۳ کاراکتر باشد")
     .max(100, "نام انتشارات باید کمتر از ۱۰۰ کاراکتر باشد"),
   image: z.string(),
-  author: z.string(),
+  author_id: z.string().optional(),
 });
 
 // get all books by mongoo
@@ -86,19 +86,18 @@ export const createBook = async (req: Request, res: Response) => {
   }
 };
 
+// create books by Sql
 export const createBookSql = async (req: Request, res: Response) => {
   try {
     const parsedData = bookSchema.parse(req.body);
-    const { title, publisher, image, author } = parsedData;
+    const { title, publisher, image, author_id } = parsedData;
     const [result] = await pool.query(
-      "INSERT INTO books (title, publisher, image, author) VALUES (?, ?, ?, ?)",
-      [title, publisher, image, author]
+      "INSERT INTO books (title, publisher, image, author_id) VALUES (?, ?, ?, ?)",
+      [title, publisher, image, author_id]
     );
-
     const [rows] = await pool.query("SELECT * FROM books WHERE id = ?", [
       (result as any).insertId,
     ]);
-
     res.status(201).json((rows as BookEntity[])[0]);
   } catch (error) {
     console.error(error);
@@ -106,29 +105,71 @@ export const createBookSql = async (req: Request, res: Response) => {
   }
 };
 
-// update books
+// update books by Mongoo
 export const updateBook = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  const book = await Book.findByIdAndUpdate(id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-
-  if (!book) {
-    return res.status(404).json({ message: "کتاب یافت نشد" });
+  try {
+    const { id } = req.params;
+    const parsedData = bookSchema.parse(req.body);
+    const book = await Book.findByIdAndUpdate(id, parsedData, {
+      new: true,
+      runValidators: true,
+    });
+    if (!book) {
+      return res.status(404).json({ message: "کتاب یافت نشد" });
+    }
+    res.json(book);
+  } catch (error) {
+    console.error("Error updating book:", error);
+    res.status(500).json({ message: "خطایی در سرور رخ داده است" });
   }
-
-  res.json(book);
 };
 
-// delete books
-export const deleteBook = async (req: Request, res: Response) => {
-  const book = await Book.findByIdAndDelete(req.params.id);
-
-  if (!book) {
-    return res.status(404).json({ message: "کتاب یافت نشد" });
+// update book by Sql
+export const updateBookSql = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const parsedData = bookSchema.partial().parse(req.body);
+    const { title, publisher, image, author_id } = parsedData;
+    const [result] = await pool.query(
+      "UPDATE books SET title = ?, publisher = ?, image = ?, author_id = ? WHERE id = ?",
+      [title, publisher, image, author_id, id]
+    );
+    if ((result as any).affectedRows === 0) {
+      return res.status(404).json({ message: "کتاب یافت نشد" });
+    }
+    const [rows] = await pool.query("SELECT * FROM books WHERE id = ?", [id]);
+    res.json((rows as BookEntity[])[0]);
+  } catch (error) {
+    console.error("Error updating books:", error);
+    res.status(500).json({ message: "خطایی در سرور رخ داده است" });
   }
+};
 
-  res.json({ message: "کتاب حذف شد" });
+// delete books by Mongoo
+export const deleteBook = async (req: Request, res: Response) => {
+  try {
+    const book = await Book.findByIdAndDelete(req.params.id);
+    if (!book) {
+      return res.status(404).json({ message: "کتاب یافت نشد" });
+    }
+    res.json({ message: "کتاب حذف شد" });
+  } catch (error) {
+    console.error("Error deleting book:", error);
+    res.status(500).json({ message: "خطایی در سرور رخ داده است" });
+  }
+};
+
+// delete books by Sql
+export const deleteBookSql = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const [result] = await pool.query("DELETE FROM books WHERE id = ?", [id]);
+    if ((result as any).affectedRows === 0) {
+      return res.status(404).json({ message: "کتاب یافت نشد" });
+    }
+    res.json({ message: "کتاب حذف شد" });
+  } catch (error) {
+    console.error("Error deleting book:", error);
+    res.status(500).json({ message: "خطایی در سرور رخ داده است" });
+  }
 };

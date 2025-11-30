@@ -50,7 +50,6 @@ export const getAuthorById = async (req: Request, res: Response) => {
 export const getAuthorsSql = async (req: Request, res: Response) => {
   try {
     const [rows] = await pool.query("SELECT * FROM authors");
-
     if ((rows as any[]).length === 0) {
       return res.json({ message: "نوینسده ای وجود ندارد" });
     } else {
@@ -94,17 +93,13 @@ export const createAuthorSql = async (req: Request, res: Response) => {
   try {
     const parsedData = authorSchema.parse(req.body);
     const { name, gender, age } = parsedData;
-
     const [result] = await pool.query(
       "INSERT INTO authors (name, gender, age) VALUES (?, ?, ?)",
       [name, gender, age]
     );
-
-    // result.insertId شامل id رکورد ایجاد شده است
     const [rows] = await pool.query("SELECT * FROM authors WHERE id = ?", [
       (result as any).insertId,
     ]);
-
     res.status(201).json((rows as AuthorEntity[])[0]);
   } catch (error) {
     console.error(error);
@@ -121,11 +116,9 @@ export const updateAuthor = async (req: Request, res: Response) => {
       new: true,
       runValidators: true,
     });
-
     if (!author) {
       return res.status(404).json({ message: "نویسنده یافت نشد" });
     }
-
     res.json(author);
   } catch (error) {
     console.error("Error updating author:", error);
@@ -139,21 +132,14 @@ export const updateAuthorSql = async (req: Request, res: Response) => {
     const { id } = req.params;
     const parsedData = authorSchema.partial().parse(req.body);
     const { name, gender, age } = parsedData;
-
-    // بروزرسانی رکورد
     const [result] = await pool.query(
       "UPDATE authors SET name = ?, gender = ?, age = ? WHERE id = ?",
       [name, gender, age, id]
     );
-
-    // result.affectedRows == 0 یعنی رکورد پیدا نشد
     if ((result as any).affectedRows === 0) {
       return res.status(404).json({ message: "نویسنده یافت نشد" });
     }
-
-    // خواندن رکورد بروزرسانی شده
     const [rows] = await pool.query("SELECT * FROM authors WHERE id = ?", [id]);
-
     res.json((rows as AuthorEntity[])[0]);
   } catch (error) {
     console.error("Error updating author:", error);
@@ -165,11 +151,9 @@ export const updateAuthorSql = async (req: Request, res: Response) => {
 export const deleteAuthor = async (req: Request, res: Response) => {
   try {
     const author = await Author.findByIdAndDelete(req.params.id);
-
     if (!author) {
       return res.status(404).json({ message: "نویسنده یافت نشد" });
     }
-
     res.json({ message: "نویسنده حذف شد" });
   } catch (error) {
     console.error("Error deleting author:", error);
@@ -181,14 +165,10 @@ export const deleteAuthor = async (req: Request, res: Response) => {
 export const deleteAuthorSql = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-
     const [result] = await pool.query("DELETE FROM authors WHERE id = ?", [id]);
-
-    // بررسی اینکه رکورد حذف شده یا نه
     if ((result as any).affectedRows === 0) {
       return res.status(404).json({ message: "نویسنده یافت نشد" });
     }
-
     res.json({ message: "نویسنده حذف شد" });
   } catch (error) {
     console.error("Error deleting author:", error);
